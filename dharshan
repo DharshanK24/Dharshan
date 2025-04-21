@@ -1,0 +1,51 @@
+# blue-deployment.yaml (example)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app-blue
+  labels:
+    app: my-app
+    version: blue
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+      version: blue
+  template:
+    metadata:
+      labels:
+        app: my-app
+        version: blue
+    spec:
+      containers:
+        - name: my-app-container
+          image: your-registry/your-image:old-version
+          ports:
+            - containerPort: 8080
+---
+# green-deployment.yaml (example)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app-green
+  labels:
+    app: my-app
+    version: green
+spec:
+  replicas: 0 # Start with zero replicas for green
+  selector:
+    matchLabels:
+      app: my-app
+      version: green
+  template:
+    metadata:
+      labels:
+        app: my-app
+        version: green
+    spec:
+      containers:
+        - name: my-app-container
+          image: your-registry/your-image:new-version
+          ports:
+            - containerPort: 8080
